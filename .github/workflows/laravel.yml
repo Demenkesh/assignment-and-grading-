@@ -33,7 +33,7 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
-          server: 	ftp.myworkportfolio.com.ng
+          server: ftp.myworkportfolio.com.ng
           username: myworkportfolio.com.ng
           password: 7a53070d2f4d
           server-dir: /public_html/assignment-and-grading/
