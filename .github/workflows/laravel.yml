@@ -1,0 +1,40 @@
+on:
+  push:
+    branches:
+      - main
+
+name: 🚀 Deploy website on push
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 720
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2.3.2
+
+      - name: Install Dependencies
+        run: composer install --no-scripts --prefer-dist --no-dev -q
+
+      - name: Copy Environment File
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Generate App Key
+        run: php artisan key:generate
+
+      - name: Clear Config and Cache
+        run: |
+          php artisan config:clear
+          php artisan cache:clear
+
+      - name: Directory Permissions
+        run: chmod -R 755 storage bootstrap/cache
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: ftp.myworkportfolio.com.ng
+          username: myworkportfolio.com.ng
+          password: 7a53070d2f4d
+          server-dir: /public_html/assignment-and-grading/
